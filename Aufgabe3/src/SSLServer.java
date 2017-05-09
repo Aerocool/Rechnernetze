@@ -5,32 +5,31 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 import javax.net.ServerSocketFactory;
+import javax.net.ssl.SSLServerSocket;
 import javax.net.ssl.SSLServerSocketFactory;
+import javax.net.ssl.SSLSocket;
 
 //TODO import SSL-Classes
 
 public class SSLServer {
 
 	public static void main(String[] args) throws IOException {
-		ServerSocket sslServerSocket = null;
+		SSLServerSocket sslServerSocket = null;
 		try {
-			// TODO set keystore and password
-			System.setProperty("javax.net.ssl.keyStore",
-					"C:/Users/Matse/Downloads/Rechnernetze/rn-ssl.jks"/* 'keystoreFile' */);
+			System.setProperty("javax.net.ssl.keyStore", "rn-ssl.jks");
 			System.setProperty("javax.net.ssl.keyStorePassword", "geheim");
 
 			System.out.println("server starts");
-			// TODO create SSLServerSocket
-			int port = 3000;
+			int port = 443;
 			ServerSocketFactory ssocketFactory = SSLServerSocketFactory.getDefault();
-			sslServerSocket = ssocketFactory.createServerSocket(port); // TODO
-																					// assign
-			Socket sslSocket = sslServerSocket.accept();
+			sslServerSocket = (SSLServerSocket) ssocketFactory.createServerSocket(port);
+			SSLSocket sslSocket = (SSLSocket) sslServerSocket.accept();
 			DataInputStream dataInputStream = new DataInputStream(sslSocket.getInputStream());
 			DataOutputStream dataOutputStream = new DataOutputStream(sslSocket.getOutputStream());
 			while (true) {
-				System.out.println(dataInputStream.readUTF());
-				dataOutputStream.writeUTF(dataInputStream.readUTF().toUpperCase());
+				String s = dataInputStream.readUTF();
+				System.out.println(s);
+				dataOutputStream.writeUTF(s.toUpperCase());
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -7,40 +7,36 @@ import java.net.UnknownHostException;
 import java.util.Scanner;
 
 import javax.net.SocketFactory;
-
-//TODO import SSL-Classes
+import javax.net.ssl.SSLSocket;
+import javax.net.ssl.SSLSocketFactory;
 
 public class SSLClient {
 
 	public static void main(String[] args) throws UnknownHostException, IOException {
-		// TODO setup truststore to verfy server-certifiacte
-
-		System.setProperty("javax.net.ssl.trustStore", "C:/Users/Matse/Downloads/Rechnernetze/truststore.jks");
+		System.setProperty("javax.net.ssl.trustStore", "truststore.jks");
 		System.setProperty("javax.net.ssl.trustStorePassword", "geheim");
 
 		System.out.println("client starts");
-		int port = 3000;
+		int port = 443;
 		String IP = InetAddress.getLocalHost().getHostAddress();
 
-		Socket sslSocket = null;
-		// TODO create SSLSocket
-		SocketFactory socketFactory = SocketFactory.getDefault();
+		SSLSocket sslSocket = null;
+		SSLSocketFactory socketFactory = (SSLSocketFactory) SSLSocketFactory.getDefault();
 		try {
-			sslSocket = socketFactory.createSocket(IP, port); // TODO assign
+			sslSocket = (SSLSocket) socketFactory.createSocket(IP, port);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
+		@SuppressWarnings("resource")
 		Scanner scanner = new Scanner(System.in);
+		String s = scanner.next();
 		DataInputStream dataInputStream = new DataInputStream(sslSocket.getInputStream());
 		DataOutputStream dataOutputStream = new DataOutputStream(sslSocket.getOutputStream());
-		while (scanner.hasNextLine()) {
-			String s = scanner.nextLine();
-			System.out.println("s: " + s);
-			dataOutputStream.writeUTF(s);
+		
+		dataOutputStream.writeUTF(s);
+		while(true)
 			System.out.println(dataInputStream.readUTF());
-		}
-		scanner.close();
 	}
 
 }
