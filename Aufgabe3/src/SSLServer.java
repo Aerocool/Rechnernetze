@@ -11,7 +11,7 @@ import javax.net.ssl.SSLServerSocketFactory;
 
 public class SSLServer {
 
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) {
 		ServerSocket sslServerSocket = null;
 		try {
 			// TODO set keystore and password
@@ -24,7 +24,7 @@ public class SSLServer {
 			int port = 3000;
 			ServerSocketFactory ssocketFactory = SSLServerSocketFactory.getDefault();
 			sslServerSocket = ssocketFactory.createServerSocket(port); // TODO
-																					// assign
+																		// assign
 			Socket sslSocket = sslServerSocket.accept();
 			DataInputStream dataInputStream = new DataInputStream(sslSocket.getInputStream());
 			DataOutputStream dataOutputStream = new DataOutputStream(sslSocket.getOutputStream());
@@ -35,8 +35,12 @@ public class SSLServer {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			if(sslServerSocket != null)
-				sslServerSocket.close();
+			if (sslServerSocket != null)
+				try {
+					sslServerSocket.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 		}
 	}
 
