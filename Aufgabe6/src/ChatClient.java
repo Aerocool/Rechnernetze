@@ -8,6 +8,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -33,6 +34,7 @@ public class ChatClient extends JFrame implements IChatClientCallback {
   private JTextArea userList;
   private JTextField inputField;
   private JTextArea textArea;
+  private IChatServer server;
  
   private ChatClient(String serverAddress) {
     // Setup GUI
@@ -116,7 +118,9 @@ public class ChatClient extends JFrame implements IChatClientCallback {
  
     this.addWindowListener(new MyWindowListener());
     try {
-      // TODO: Hier muss man den Server finden und den Callback bekannt machen
+    	UnicastRemoteObject.exportObject(this, 0);
+    	IChatServer chatServer = (IChatServer) Naming.lookup("rmi://localhost/queue");
+    	server = chatServer;
     } catch (Exception e) {
       System.out.println("Exception" + e);
       e.printStackTrace();
@@ -147,18 +151,19 @@ public class ChatClient extends JFrame implements IChatClientCallback {
   */
   public void receiveUserLogout(String userID, Object[] users)
   throws RemoteException {
-    //TODO
+	  for(int i = 0; i < users.length; i++){
+		  ChatClient client = (ChatClient) users[i];
+		  client.receiveChat(userID, " logout");
+		  userList.setText(userList.getText().replaceAll(client.userName, ""));
+	  }
   }
  
   public static void main(String[] args) {
 	try
 	{
-		OwnStackInterface ownStack = (OwnStackInterface) Naming.lookup("rmi://localhost/queue");
-		Integer integer = new Integer(42);
-		ownStack.push(integer);
-		System.out.println(ownStack.pop());
 	    ChatClient chat = new ChatClient("localhost");
 	    chat.setVisible(true);
+		System.out.println("Client ready");
 	} catch(Exception e)
 	{
 		e.printStackTrace();

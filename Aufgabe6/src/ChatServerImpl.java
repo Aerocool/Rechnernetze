@@ -5,7 +5,7 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
- 
+
 public class ChatServerImpl extends UnicastRemoteObject implements IChatServer {
  
   private static final long serialVersionUID = 1L;
@@ -22,22 +22,34 @@ public class ChatServerImpl extends UnicastRemoteObject implements IChatServer {
  
   public boolean login(String userID, IChatClientCallback receiver)
   throws RemoteException {
-    //TODO Alle informieren
-	  return false;
+      //TODO Alle informieren
+	  receiver.receiveUserLogin(userID, users.values().toArray());
+	  users.put(userID, receiver);
+	  return true;
   }
  
   public void logout(String userID) throws RemoteException {
     //TODO Alle informieren
+	  IChatClientCallback client = users.get(userID);
+	  client.receiveUserLogout(userID, users.values().toArray());
+	  users.remove(userID);
   }
  
-  public void chat(String userID, String message) throws RemoteException {
-    // TODO: Alle die Chatnachricht empfangen lassen
-  }
+	public void chat(String userID, String message) throws RemoteException {
+		// TODO: Alle die Chatnachricht empfangen lassen
+		users.forEach((userId, specificClient) -> {
+			try {
+				specificClient.receiveChat(userID, message);
+			} catch (RemoteException e) {
+				e.printStackTrace();
+			}
+		});
+	}
  
   public static void main(String[] args) {
     try {
       LocateRegistry.createRegistry(1099);
-      Naming.bind("rmi://localhost/queue", new OwnStackImplementation());
+      Naming.bind("rmi://localhost/queue", new ChatServerImpl());
       System.out.println("ChatServer ready");
     } catch (Exception ex) {
       ex.printStackTrace();
