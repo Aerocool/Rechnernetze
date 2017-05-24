@@ -1,4 +1,2 @@
 INDEX VERSION 1.130+C:\Users\Matse\workspace\Rechnernetze\.metadata\.plugins\org.eclipse.jdt.core
-759183446.index
-3005525493.index
 3276691834.index

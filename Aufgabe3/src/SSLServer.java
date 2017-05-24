@@ -13,13 +13,8 @@ import javax.net.ssl.SSLSocket;
 
 public class SSLServer {
 
-<<<<<<< HEAD
 	public static void main(String[] args) {
 		ServerSocket sslServerSocket = null;
-=======
-	public static void main(String[] args) throws IOException {
-		SSLServerSocket sslServerSocket = null;
->>>>>>> 3105522b0363fb2a75d980503b979916bfbae68b
 		try {
 			System.setProperty("javax.net.ssl.keyStore", "rn-ssl.jks");
 			System.setProperty("javax.net.ssl.keyStorePassword", "geheim");
@@ -27,14 +22,9 @@ public class SSLServer {
 			System.out.println("server starts");
 			int port = 443;
 			ServerSocketFactory ssocketFactory = SSLServerSocketFactory.getDefault();
-<<<<<<< HEAD
-			sslServerSocket = ssocketFactory.createServerSocket(port); // TODO
-																		// assign
-			Socket sslSocket = sslServerSocket.accept();
-=======
+
 			sslServerSocket = (SSLServerSocket) ssocketFactory.createServerSocket(port);
 			SSLSocket sslSocket = (SSLSocket) sslServerSocket.accept();
->>>>>>> 3105522b0363fb2a75d980503b979916bfbae68b
 			DataInputStream dataInputStream = new DataInputStream(sslSocket.getInputStream());
 			DataOutputStream dataOutputStream = new DataOutputStream(sslSocket.getOutputStream());
 			while (true) {
