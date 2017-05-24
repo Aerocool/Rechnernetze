@@ -1,0 +1,89 @@
+package mouseclicker;
+
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.text.PlainDocument;
+
+@SuppressWarnings("serial")
+public class Gui extends JFrame {
+	private JLabel clickDelayLabel;
+	private JLabel clickCounterLabel;
+	private JLabel isClickingLabel;
+	private JLabel info;
+
+	private JButton start;
+	private JButton stop;
+
+	private JTextField delayInput;
+
+	public Gui() {
+		clickDelayLabel = new JLabel("Mouseclick every");
+		clickCounterLabel = new JLabel("Click counter: ");
+		isClickingLabel = new JLabel("Mouseclicker is activated: ");
+		info = new JLabel("Info");
+
+		start = new JButton("Start");
+		stop = new JButton("Stop");
+
+		delayInput = new JTextField("20");
+		createGui();
+	}
+
+	private void createGui() {
+		KeyboardControler controler = new KeyboardControler(this);
+		Listener listener = new Listener(this);
+		stop.addKeyListener(controler);
+//		AbstractAction stopAction = new AbstractAction() {
+//			@Override
+//			public void actionPerformed(ActionEvent e) {
+//				System.out.println(e.getActionCommand());
+//			}
+//		};
+		stop.addActionListener(listener);
+		stop.getInputMap(javax.swing.JComponent.WHEN_IN_FOCUSED_WINDOW)
+				.put(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, 0), "P_pressed");
+		stop.getActionMap().put("P_pressed", listener);
+		
+		start.addActionListener(listener);
+
+		FlowLayout layout = new FlowLayout();
+		this.setLayout(layout);
+		// stackoverflow copy and paste
+		JPanel panel = new JPanel();
+		panel.add(delayInput);
+
+		PlainDocument doc = (PlainDocument) delayInput.getDocument();
+		doc.setDocumentFilter(new InputFilter());
+
+		// JOptionPane.showMessageDialog(null, panel);
+		// stackoverflow ende
+
+		add(info);
+		add(clickDelayLabel);
+		add(delayInput);
+		add(clickCounterLabel);
+		add(isClickingLabel);
+		add(start);
+		add(stop);
+
+		this.setSize(1920, 1080);
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	}
+	
+	public long getDelayInput(){
+		return Long.parseLong(delayInput.getText());
+	}
+
+	public static void main(String[] args) {
+		Gui gui = new Gui();
+		gui.setVisible(true);
+	}
+}

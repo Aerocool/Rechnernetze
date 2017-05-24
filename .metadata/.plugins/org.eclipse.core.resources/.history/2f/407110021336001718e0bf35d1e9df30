@@ -1,0 +1,72 @@
+package mouseclicker;
+
+import java.awt.FlowLayout;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.text.PlainDocument;
+
+public class Gui extends JFrame {
+	private JLabel clickDelayLabel;
+	private JLabel clickCounterLabel;
+	private JLabel isClickingLabel;
+	private JLabel info;
+	
+	private JButton start;
+	private JButton stop;
+	
+	private JTextField delayInput;
+	
+	public Gui(){
+		clickDelayLabel = new JLabel("Mouseclick every");
+		clickCounterLabel = new JLabel("Click counter: ");
+		isClickingLabel = new JLabel("Mouseclicker is activated: ");
+		info = new JLabel("Info");
+		
+		start = new JButton("Start");
+		stop = new JButton("Stop");
+		
+		delayInput = new JTextField("20");
+		createGui();
+	}
+	
+	private void createGui(){
+		  KeyboardControler controler = new KeyboardControler(this);
+		  Listener listener = new Listener(this);
+		  stop.addKeyListener(controler);
+		  stop.addActionListener(listener);
+		  start.addActionListener(listener);
+		
+		  FlowLayout layout = new FlowLayout();
+		  this.setLayout(layout);
+		  // stackoverflow copy and paste
+	      JPanel panel = new JPanel();
+	      panel.add(delayInput);
+
+	      PlainDocument doc = (PlainDocument) delayInput.getDocument();
+	      doc.setDocumentFilter(new InputFilter());
+
+	      //JOptionPane.showMessageDialog(null, panel);
+	      // stackoverflow ende
+	      
+	      add(info);
+	      add(clickDelayLabel);
+	      add(delayInput);
+	      add(clickCounterLabel);
+	      add(isClickingLabel);
+	      add(start);
+	      add(stop);
+	      
+	      this.setSize(1920, 1080);
+	      this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	}
+	
+	public static void main(String[] args) {
+		Gui gui = new Gui();
+		gui.setVisible(true);
+	}
+}

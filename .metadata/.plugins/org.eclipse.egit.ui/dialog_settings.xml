@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<section name="GitCommitMessageComponent">
+		<list key="C:\Users\Matse\workspace\Rechnernetze\.git">
+			<item value="false"/>
+			<item value="Thilo Nietzschmann &lt;thilo@nietzschmann.de&gt;"/>
+			<item value="JAXB Aufgabe"/>
+			<item value="Thilo Nietzschmann &lt;thilo@nietzschmann.de&gt;"/>
+			<item value="ecfcd5b4a6dde79d6e7f72b87a4b8880cc922caf"/>
+		</list>
+	</section>
+	<section name="org.eclipse.egit.ui.internal.staging.StagingView">
+		<item value="200,200" key="STAGING_SASH_FORM_WEIGHT"/>
+		<item value="false" key="sortItemState"/>
+		<item value="200,200" key="HORIZONTAL_SASH_FORM_WEIGHT"/>
+	</section>
+</section>
